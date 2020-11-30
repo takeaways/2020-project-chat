@@ -1,4 +1,4 @@
-import { SET_USER } from '../actions/types'
+import { SET_USER, CLEAR_USER, SET_USER_PHOTO } from '../actions/types'
 
 const initialUserState = {
   currentUser: null,
@@ -7,12 +7,29 @@ const initialUserState = {
 
 export default function userReducer(state = initialUserState, action) {
   switch (action.type) {
-    case SET_USER:
+    case SET_USER: {
       return {
         ...state,
         currentUser: action.payload,
         isLoading: false,
       }
+    }
+
+    case CLEAR_USER: {
+      return {
+        ...state,
+        currentUser: null,
+      }
+    }
+
+    case SET_USER_PHOTO: {
+      return {
+        ...state,
+        currentUser: { ...state.currentUser, photoUrl: action.payload },
+        isLoading: false,
+      }
+    }
+
     default:
       return state
   }
