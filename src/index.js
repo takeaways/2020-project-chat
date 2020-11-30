@@ -12,6 +12,7 @@ import promiseMiddleware from 'redux-promise'
 import thunk from 'redux-thunk'
 
 import rootReducer from './redux/reducer'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const createStoreWidthMiddleware = applyMiddleware(promiseMiddleware, thunk)(createStore)
 
