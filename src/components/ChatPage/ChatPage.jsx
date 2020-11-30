@@ -1,11 +1,7 @@
 import React from 'react'
 
 function ChatPage() {
-    return (
-        <div>
-            
-        </div>
-    )
+  return <div>ss</div>
 }
 
 export default ChatPage
