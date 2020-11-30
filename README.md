@@ -5,3 +5,9 @@
 1. react
 2. redux
 3. 🤩 firebase (RTSP)
+
+## Pages
+
+- [x] LoginPage
+- [x] RegisterPage
+- [ ] ChatPage
