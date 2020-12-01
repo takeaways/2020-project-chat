@@ -19,6 +19,7 @@ export default function userReducer(state = initialUserState, action) {
       return {
         ...state,
         currentUser: null,
+        isLoading: false,
       }
     }
 
