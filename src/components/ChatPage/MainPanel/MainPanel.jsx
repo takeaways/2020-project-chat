@@ -29,7 +29,7 @@ export class MainPanel extends Component {
 
   renderMessages = (messages) => {
     return (
-      messages.lengh > 0 &&
+      messages.length > 0 &&
       messages.map((message) => (
         <Message
           key={message.timestamp}
