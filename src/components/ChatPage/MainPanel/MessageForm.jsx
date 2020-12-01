@@ -39,11 +39,11 @@ function MessageForm() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
+
     if (!content) {
       return setErrors((prev) => prev.concat('Type contents first'))
     }
-    setLoading(true)
 
     try {
       await messagesRef.child(chatRoom.id).push().set(createMessage())
