@@ -13,6 +13,7 @@ function MessageForm() {
   const [content, setContet] = useState('')
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(false)
+  const [percentage, setPercentage] = useState(0)
   const fileRef = useRef()
   const messagesRef = firebase.database().ref('messages')
   const storageRef = firebase.storage().ref()
@@ -65,13 +66,38 @@ function MessageForm() {
   const handleUploadFile = async (e) => {
     const file = e.target.files[0]
     if (!file) return
+    setLoading(true)
     const filePath = `/message/public/${file.name}`
     const metadata = {
       contentType: mime.lookup(file.name),
     }
 
     try {
-      await storageRef.child(filePath).put(file, metadata)
+      const uploadTask = storageRef.child(filePath).put(file, metadata)
+      uploadTask.on(
+        'state_changed',
+        (uploadSnapshot) => {
+          const percentage =
+            Math.round(
+              uploadSnapshot.bytesTransferred / uploadSnapshot.totalBytes,
+            ) * 100
+
+          setPercentage(percentage)
+        },
+        (error) => {
+          console.log(error)
+          setLoading(false)
+        },
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+            messagesRef.child(chatRoom.id).push().set(createMessage(url))
+          })
+          setTimeout(() => {
+            setLoading(false)
+            setPercentage(0)
+          }, 1000)
+        },
+      )
     } catch (error) {
       console.log(error)
     }
@@ -89,7 +115,13 @@ function MessageForm() {
           />
         </Form.Group>
       </Form>
-      <ProgressBar variant="warning" now={60} label={`60%`} />
+      {loading && (
+        <ProgressBar
+          variant="warning"
+          now={percentage}
+          label={`${percentage}%`}
+        />
+      )}
       <div className="error">
         {errors.map((errorMsg) => (
           <p key={errorMsg}>{errorMsg}</p>
@@ -97,13 +129,18 @@ function MessageForm() {
       </div>
       <Row>
         <Col>
-          <button onClick={handleSubmit}>SEND</button>
+          <button disabled={loading} onClick={handleSubmit}>
+            SEND
+          </button>
         </Col>
         <Col>
-          <button onClick={handleOpenFile}>UPLOAD</button>
+          <button disabled={loading} onClick={handleOpenFile}>
+            UPLOAD
+          </button>
         </Col>
       </Row>
       <input
+        accept="image/jpeg image/png"
         ref={fileRef}
         type="file"
         style={{ display: 'none' }}
