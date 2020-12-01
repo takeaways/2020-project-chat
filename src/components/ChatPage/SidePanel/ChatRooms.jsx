@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import firebase from '../../../firebase'
+import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action'
 
 class ChatRooms extends Component {
   state = {
@@ -14,17 +15,28 @@ class ChatRooms extends Component {
     description: '',
     chatRoomsRef: firebase.database().ref('chatRooms'),
     chatRooms: [],
+    firstLoad: true,
+    activeChatRoomId: '',
   }
 
   componentDidMount() {
     this.AddChatRoomsListeners()
   }
 
+  setFirstChatRoom = () => {
+    const firstChatRoom = this.state.chatRooms[0]
+    if (this.state.firstLoad && this.state.chatRooms.length > 0) {
+      this.props.dispatch(setCurrentChatRoom(firstChatRoom))
+      this.setState({ activeChatRoomId: firstChatRoom.id })
+    }
+    this.setState({ firstLoad: false })
+  }
+
   AddChatRoomsListeners = () => {
     const chatRooms = []
     this.state.chatRoomsRef.on('child_added', (snapshot) => {
       chatRooms.push(snapshot.val())
-      this.setState({ chatRooms })
+      this.setState({ chatRooms }, () => this.setFirstChatRoom())
     })
   }
 
@@ -70,8 +82,22 @@ class ChatRooms extends Component {
 
   renderChatRooms = (chatRooms) => {
     return (
-      chatRooms.length > 0 && chatRooms.map((room) => <li># {room.name}</li>)
+      chatRooms.length > 0 &&
+      chatRooms.map((room) => (
+        <li
+          className={room.id === this.state.activeChatRoomId ? 'active' : ''}
+          key={room.id}
+          onClick={() => this.changeChatRoom(room)}
+        >
+          # {room.name}
+        </li>
+      ))
     )
+  }
+
+  changeChatRoom = (room) => {
+    this.setState({ activeChatRoomId: room.id })
+    this.props.dispatch(setCurrentChatRoom(room))
   }
 
   render() {
@@ -148,6 +174,16 @@ const Wrapper = styled.div`
     padding: 0;
   }
   li {
-    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 0 8px 4px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  li:hover {
+    background-color: #ffffff45;
+  }
+  .active {
+    background-color: #ffffff45;
   }
 `
