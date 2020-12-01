@@ -11,7 +11,6 @@ function LoginPage() {
   const onSubmit = async (data) => {
     try {
       setLoading(true)
-
       await firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
