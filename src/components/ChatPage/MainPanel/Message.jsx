@@ -1,7 +1,9 @@
 import React from 'react'
-
+import styled from 'styled-components'
 function Message() {
-  return <div>Message Message</div>
+  return <Wrapper>Message Message</Wrapper>
 }
+
+const Wrapper = styled.div``
 
 export default Message

@@ -20,6 +20,7 @@ function SidePanel() {
 const Wrapper = styled.div`
   background-color: #7b83eb;
   padding: 2rem;
+  height: 100%;
   min-height: 100vh;
   color: white;
   min-width: 275px;

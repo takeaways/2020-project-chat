@@ -18,6 +18,7 @@ export class MainPanel extends Component {
 
 const Wrapper = styled.div`
   padding: 2rem 2rem 0 2rem;
+  min-height: 100vh;
 
   .message {
     width: 100%;
