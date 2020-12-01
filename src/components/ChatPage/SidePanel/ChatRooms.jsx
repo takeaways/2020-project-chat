@@ -13,6 +13,19 @@ class ChatRooms extends Component {
     name: '',
     description: '',
     chatRoomsRef: firebase.database().ref('chatRooms'),
+    chatRooms: [],
+  }
+
+  componentDidMount() {
+    this.AddChatRoomsListeners()
+  }
+
+  AddChatRoomsListeners = () => {
+    const chatRooms = []
+    this.state.chatRoomsRef.on('child_added', (snapshot) => {
+      chatRooms.push(snapshot.val())
+      this.setState({ chatRooms })
+    })
   }
 
   handleShow = () => this.setState({ show: true })
@@ -22,12 +35,12 @@ class ChatRooms extends Component {
       [e.target.name]: e.target.value,
     })
 
-  addChatRoom = () => {
+  addChatRoom = async () => {
     const { name, description } = this.state
     const { user } = this.props
-    console.log(name, description, user)
+    const id = this.state.chatRoomsRef.push().key
     const newChatRoom = {
-      id: this.state.chatRoomsRef.push().ref,
+      id,
       name,
       description,
       createdBy: {
@@ -35,24 +48,31 @@ class ChatRooms extends Component {
         image: user.photoURL,
       },
     }
+    try {
+      await this.state.chatRoomsRef.child(id).update(newChatRoom)
+      this.setState({
+        name: '',
+        description: '',
+        show: false,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
     const { name, description } = this.state
-
-    try {
-      if (this.isFormValid(name, description)) {
-        this.addChatRoom()
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      this.handleClose()
-    }
+    this.isFormValid(name, description) && this.addChatRoom()
   }
 
   isFormValid = (name, description) => name && description
+
+  renderChatRooms = (chatRooms) => {
+    return (
+      chatRooms.length > 0 && chatRooms.map((room) => <li># {room.name}</li>)
+    )
+  }
 
   render() {
     return (
@@ -65,6 +85,7 @@ class ChatRooms extends Component {
             onClick={this.handleShow}
           />
         </div>
+        <ul>{this.renderChatRooms(this.state.chatRooms)}</ul>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
@@ -120,5 +141,13 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    padding: 5px 0;
   }
 `
