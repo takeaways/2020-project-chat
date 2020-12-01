@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { FaRegSmileWink, FaPlus } from 'react-icons/fa'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import {} from 'react-hook-form'
 class ChatRooms extends Component {
   state = {
     show: false,
@@ -19,18 +21,26 @@ class ChatRooms extends Component {
           CHAT ROOMS (1)
           <FaPlus
             style={{ position: 'absolute', right: 0, cursor: 'pointer' }}
+            onClick={this.handleShow}
           />
         </div>
 
-        <Button variant="primary" onClick={this.handleShow}>
-          Launch demo modal
-        </Button>
-
-        <Modal show={this.show} onHide={this.handleClose}>
+        <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>새로운 챗팅방 생성</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Body>
+            <Form>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Label>방 이름</Form.Label>
+                <Form.Control type="text" placeholder="챗팅방 이름" />
+              </Form.Group>
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>방 설명</Form.Label>
+                <Form.Control type="text" placeholder="방 설명을 적어주세요." />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.handleClose}>
               Close
