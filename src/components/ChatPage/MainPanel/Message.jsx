@@ -33,7 +33,7 @@ const Wrapper = styled(Media)`
   align-items: center;
   margin-bottom: 4px;
 
-  img {
+  .mr-3 {
     border-radius: 10px;
     width: 48px;
     height: 48px;
@@ -51,8 +51,20 @@ const Wrapper = styled(Media)`
   }
 
   .mine {
+    border-radius: 5px;
     background-color: #efefef;
     padding: 1em;
+  }
+
+  img {
+    max-width: 250px;
+    max-height: 250px;
+    transition: transform 1s ease;
+    cursor: pointer;
+  }
+
+  img:hover {
+    transform: scale(1.3);
   }
 `
 
