@@ -8,12 +8,16 @@ function Message({ message, user }) {
   const isImage = (message) =>
     message.hasOwnProperty('image') && !message.hasOwnProperty('content');
 
-  const isMessageMine = () => message.user.uid === user.uid;
+  const isMessageMine = () => message || message.user.uid === user.uid;
 
   return (
     <Wrapper>
       <img className="mr-3" src={message.user.image} alt={message.user.name} />
-      <Media.Body className={isMessageMine(message, user) ? 'mine' : ''}>
+      <Media.Body
+        className={
+          message && user && isMessageMine(message, user) ? 'mine' : ''
+        }
+      >
         <h6>
           {message.user.name}
           <span> {timeFromNow(message.timestamp)}</span>

@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import { FaRegSmile } from 'react-icons/fa';
 import firebase from 'myFirebase';
 import { connect } from 'react-redux';
-import { setCurrentChatRoom } from 'redux/actions/chatRoom_action';
+import {
+  setCurrentChatRoom,
+  setPrivateChatRoom,
+} from 'redux/actions/chatRoom_action';
 
 export class DirectMessage extends Component {
   state = {
     usersRef: firebase.database().ref('users'),
     users: [],
+    activeChatRoom: '',
   };
 
   componentDidMount() {
@@ -46,6 +50,12 @@ export class DirectMessage extends Component {
       name: user.name,
     };
     this.props.dispatch(setCurrentChatRoom(chatRoomData));
+    this.props.dispatch(setPrivateChatRoom(true));
+    this.setActiveChatRoom(user.uid);
+  };
+
+  setActiveChatRoom = (userId) => {
+    this.setState({ activeChatRoom: userId });
   };
 
   renderDirectMessages = (users) => {
@@ -53,6 +63,9 @@ export class DirectMessage extends Component {
       users.length > 0 &&
       users.map((user) => (
         <li
+          className={`${
+            user.uid === this.state.activeChatRoom ? 'active' : ''
+          }`}
           key={user.uid}
           onClick={() => {
             this.changeChatRoom(user);
@@ -85,6 +98,16 @@ const Wrapper = styled.section`
   & > ul {
     list-style: none;
     padding: 0;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    padding: 8px 0 8px 4px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .active {
+    background-color: #ffffff45;
   }
 `;
 

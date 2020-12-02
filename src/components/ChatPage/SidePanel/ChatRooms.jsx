@@ -6,7 +6,10 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import firebase from '../../../myFirebase';
-import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action';
+import {
+  setCurrentChatRoom,
+  setPrivateChatRoom,
+} from '../../../redux/actions/chatRoom_action';
 
 class ChatRooms extends Component {
   state = {
@@ -102,6 +105,7 @@ class ChatRooms extends Component {
   changeChatRoom = (room) => {
     this.setState({ activeChatRoomId: room.id });
     this.props.dispatch(setCurrentChatRoom(room));
+    this.props.dispatch(setPrivateChatRoom(false));
   };
 
   render() {
