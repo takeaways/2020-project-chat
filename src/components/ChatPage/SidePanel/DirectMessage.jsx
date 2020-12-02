@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FaRegSmile } from 'react-icons/fa';
 import firebase from 'myFirebase';
 import { connect } from 'react-redux';
+import { setCurrentChatRoom } from 'redux/actions/chatRoom_action';
 
 export class DirectMessage extends Component {
   state = {
@@ -32,6 +33,7 @@ export class DirectMessage extends Component {
 
   getChatRoomId = (userId) => {
     const currentUserId = this.props.user.uid;
+
     return userId > currentUserId
       ? `${userId}/${currentUserId}`
       : `${currentUserId}/${userId}`;
@@ -39,7 +41,11 @@ export class DirectMessage extends Component {
 
   changeChatRoom = (user) => {
     const chatRoomId = this.getChatRoomId(user.uid);
-    console.log(chatRoomId);
+    const chatRoomData = {
+      id: chatRoomId,
+      name: user.name,
+    };
+    this.props.dispatch(setCurrentChatRoom(chatRoomData));
   };
 
   renderDirectMessages = (users) => {
@@ -58,7 +64,6 @@ export class DirectMessage extends Component {
     );
   };
 
-  getChatRoomId = (userId) => {};
   render() {
     const { users } = this.state;
     return (
