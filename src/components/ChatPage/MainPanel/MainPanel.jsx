@@ -1,31 +1,59 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import firebase from '../../../firebase'
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import firebase from '../../../firebase';
 
-import MessageForm from './MessageForm'
-import MessageHeader from './MessageHeader'
-import Message from './Message'
+import MessageForm from './MessageForm';
+import MessageHeader from './MessageHeader';
+import Message from './Message';
 
 export class MainPanel extends Component {
   state = {
     messageRef: firebase.database().ref('messages'),
     messages: [],
     messagesLoading: true,
-  }
+    searchTerm: '',
+    searchResults: [],
+    searchLoading: false,
+  };
 
   componentDidMount = () => {
-    const { chatRoom } = this.props
-    chatRoom && this.addMessageListener(chatRoom.id)
-  }
+    const { chatRoom } = this.props;
+    chatRoom && this.addMessageListener(chatRoom.id);
+  };
+
+  handleSearchChange = (event) => {
+    this.setState(
+      { searchTerm: event.target.value, searchLoading: true },
+      () => {
+        this.handleSearchMessages();
+      },
+    );
+  };
+
+  handleSearchMessages = () => {
+    const chatRoomMessages = [...this.state.messages];
+    const regex = new RegExp(this.state.searchTerm, 'gi');
+    const searchResults = chatRoomMessages.reduce((acc, message) => {
+      if (
+        (message.content && message.content.match(regex)) ||
+        message.user.name.match(regex)
+      ) {
+        acc.push(message);
+      }
+      return acc;
+    }, []);
+
+    this.setState({ searchResults });
+  };
 
   addMessageListener = (chatRoomId) => {
-    const messages = []
+    const messages = [];
     this.state.messageRef.child(chatRoomId).on('child_added', (snapshot) => {
-      messages.push(snapshot.val())
-      this.setState({ messages, messagesLoading: false })
-    })
-  }
+      messages.push(snapshot.val());
+      this.setState({ messages, messagesLoading: false });
+    });
+  };
 
   renderMessages = (messages) => {
     return (
@@ -37,18 +65,22 @@ export class MainPanel extends Component {
           user={this.props.user}
         />
       ))
-    )
-  }
+    );
+  };
 
   render() {
-    const { messages } = this.state
+    const { messages, searchTerm, searchResults } = this.state;
     return (
       <Wrapper>
-        <MessageHeader />
-        <div className={'message'}>{this.renderMessages(messages)}</div>
+        <MessageHeader handleSearchChange={this.handleSearchChange} />
+        <div className={'message'}>
+          {searchTerm
+            ? this.renderMessages(searchResults)
+            : this.renderMessages(messages)}
+        </div>
         <MessageForm />
       </Wrapper>
-    )
+    );
   }
 }
 
@@ -65,13 +97,13 @@ const Wrapper = styled.div`
     margin-bottom: 1rem;
     overflow-y: auto;
   }
-`
+`;
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.currentUser,
     chatRoom: state.chatRoom.currentChatRoom,
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(MainPanel)
+export default connect(mapStateToProps)(MainPanel);

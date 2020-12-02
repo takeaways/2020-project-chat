@@ -1,20 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
-import Accordion from 'react-bootstrap/Accordion'
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import { FaLock } from 'react-icons/fa'
-import { MdFavorite } from 'react-icons/md'
-import { AiOutlineSearch } from 'react-icons/ai'
-import Image from 'react-bootstrap/Image'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import Accordion from 'react-bootstrap/Accordion';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import { FaLock } from 'react-icons/fa';
+import { MdFavorite } from 'react-icons/md';
+import { AiOutlineSearch } from 'react-icons/ai';
+import Image from 'react-bootstrap/Image';
 
-function MessageHeader() {
+function MessageHeader({ handleSearchChange }) {
   return (
     <Wrapper>
       <Container>
@@ -35,6 +35,7 @@ function MessageHeader() {
                 </InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
+                onChange={handleSearchChange}
                 placeholder="Search Message"
                 aria-label="Search"
                 aria-describedby="basic-addon1"
@@ -79,7 +80,7 @@ function MessageHeader() {
         </Row>
       </Container>
     </Wrapper>
-  )
+  );
 }
 
 const Wrapper = styled.div`
@@ -97,5 +98,5 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: flex-end;
   }
-`
-export default MessageHeader
+`;
+export default MessageHeader;
