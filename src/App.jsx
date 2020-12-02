@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ChatPage from './components/ChatPage/ChatPage';
-import LoginPage from './components/LoginPage/LoginPage';
-import Registerpage from './components/RegisterPage/RegisterPage';
-
-import { setUser, clearUser } from './redux/actions/user_action';
+import ChatPage from 'components/ChatPage/ChatPage';
+import LoginPage from 'components/LoginPage/LoginPage';
+import Registerpage from 'components/RegisterPage/RegisterPage';
+import { setUser, clearUser } from 'redux/actions/user_action';
 
 import firebase from 'myFirebase';
 

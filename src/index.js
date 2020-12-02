@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import App from './App.jsx';
-import reportWebVitals from './reportWebVitals';
-import GlobalStyles from './commons/components/GlobalStyles';
+import App from 'App.jsx';
+import reportWebVitals from 'reportWebVitals';
+import GlobalStyles from 'commons/components/GlobalStyles';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -11,7 +11,7 @@ import { createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import thunk from 'redux-thunk';
 
-import rootReducer from './redux/reducer';
+import rootReducer from 'redux/reducer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const createStoreWidthMiddleware = applyMiddleware(
