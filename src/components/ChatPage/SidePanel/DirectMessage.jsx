@@ -7,10 +7,10 @@ import { connect } from 'react-redux';
 export class DirectMessage extends Component {
   state = {
     usersRef: firebase.database().ref('users'),
+    users: [],
   };
 
   componentDidMount() {
-    console.log(this.props);
     if (this.props.user) {
       this.addUserListener(this.props.user.uid);
     }
@@ -30,14 +30,43 @@ export class DirectMessage extends Component {
     });
   };
 
-  renderDirectMessages = () => {};
+  getChatRoomId = (userId) => {
+    const currentUserId = this.props.user.uid;
+    return userId > currentUserId
+      ? `${userId}/${currentUserId}`
+      : `${currentUserId}/${userId}`;
+  };
+
+  changeChatRoom = (user) => {
+    const chatRoomId = this.getChatRoomId(user.uid);
+    console.log(chatRoomId);
+  };
+
+  renderDirectMessages = (users) => {
+    return (
+      users.length > 0 &&
+      users.map((user) => (
+        <li
+          key={user.uid}
+          onClick={() => {
+            this.changeChatRoom(user);
+          }}
+        >
+          # {user.name}
+        </li>
+      ))
+    );
+  };
+
+  getChatRoomId = (userId) => {};
   render() {
+    const { users } = this.state;
     return (
       <Wrapper>
         <span>
           <FaRegSmile style={{ marginRight: 3 }} /> DIRECT MESSAGE(1)
         </span>
-        <ul>{this.renderDirectMessages()}</ul>
+        <ul>{this.renderDirectMessages(users)}</ul>
       </Wrapper>
     );
   }
