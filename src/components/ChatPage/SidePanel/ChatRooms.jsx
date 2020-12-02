@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import firebase from '../../../firebase';
+import firebase from '../../../myFirebase';
 import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action';
 
 class ChatRooms extends Component {

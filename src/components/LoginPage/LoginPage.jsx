@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import firebase from '../../firebase'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import firebase from 'myFirebase';
 
 function LoginPage() {
-  const { register, errors, handleSubmit } = useForm()
-  const [errorFromSubmit, setErrorFromSubmit] = useState('')
-  const [loading, setLoading] = useState(false)
+  const { register, errors, handleSubmit } = useForm();
+  const [errorFromSubmit, setErrorFromSubmit] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
     try {
-      setLoading(true)
+      setLoading(true);
       await firebase
         .auth()
-        .signInWithEmailAndPassword(data.email, data.password)
+        .signInWithEmailAndPassword(data.email, data.password);
 
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
-      setErrorFromSubmit(error.message)
-      setLoading(false)
+      setErrorFromSubmit(error.message);
+      setLoading(false);
       setTimeout(() => {
-        setErrorFromSubmit('')
-      }, 5000)
+        setErrorFromSubmit('');
+      }, 5000);
     }
-  }
+  };
 
   return (
     <div className="auth-wrapper">
@@ -57,7 +57,7 @@ function LoginPage() {
         </Link>
       </form>
     </div>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

@@ -1,45 +1,45 @@
-import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import firebase from '../../firebase'
-import md5 from 'md5'
+import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import firebase from 'myFirebase';
+import md5 from 'md5';
 
 function RegisterPage() {
-  const { register, watch, errors, handleSubmit } = useForm()
-  const [errorFromSubmit, setErrorFromSubmit] = useState('')
-  const [loading, setLoading] = useState(false)
+  const { register, watch, errors, handleSubmit } = useForm();
+  const [errorFromSubmit, setErrorFromSubmit] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const password = useRef()
-  password.current = watch('password')
+  const password = useRef();
+  password.current = watch('password');
 
   const onSubmit = async (data) => {
     try {
-      setLoading(true)
+      setLoading(true);
       let createdUser = await firebase
         .auth()
-        .createUserWithEmailAndPassword(data.email, data.password)
+        .createUserWithEmailAndPassword(data.email, data.password);
 
       await createdUser.user.updateProfile({
         displayName: data.name,
         photoURL: `http://gravatar.com/avatar/${md5(
           createdUser.user.email,
         )}?d=identicon`,
-      })
+      });
 
       await firebase.database().ref('users').child(createdUser.user.uid).set({
         name: createdUser.user.displayName,
         image: createdUser.user.photoURL,
-      })
+      });
 
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
-      setErrorFromSubmit(error.message)
-      setLoading(false)
+      setErrorFromSubmit(error.message);
+      setLoading(false);
       setTimeout(() => {
-        setErrorFromSubmit('')
-      }, 5000)
+        setErrorFromSubmit('');
+      }, 5000);
     }
-  }
+  };
 
   return (
     <div className="auth-wrapper">
@@ -103,7 +103,7 @@ function RegisterPage() {
         </Link>
       </form>
     </div>
-  )
+  );
 }
 
-export default RegisterPage
+export default RegisterPage;

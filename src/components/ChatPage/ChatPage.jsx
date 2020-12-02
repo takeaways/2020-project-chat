@@ -1,11 +1,11 @@
-import React from 'react'
-import SidePanel from './SidePanel/SidePanel'
-import MainPanel from './MainPanel/MainPanel'
-import style from './ChatPage.module.css'
-import { useSelector } from 'react-redux'
+import React from 'react';
+import SidePanel from './SidePanel/SidePanel';
+import MainPanel from './MainPanel/MainPanel';
+import style from './ChatPage.module.css';
+import { useSelector } from 'react-redux';
 
 function ChatPage() {
-  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom)
+  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
 
   return (
     <article className={style.container}>
@@ -16,7 +16,7 @@ function ChatPage() {
         <MainPanel key={chatRoom && chatRoom.id} />
       </section>
     </article>
-  )
+  );
 }
 
-export default ChatPage
+export default ChatPage;

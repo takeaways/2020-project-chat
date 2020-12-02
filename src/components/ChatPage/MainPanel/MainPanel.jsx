@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import firebase from '../../../firebase';
+import firebase from '../../../myFirebase';
 
 import MessageForm from './MessageForm';
 import MessageHeader from './MessageHeader';

@@ -1,8 +1,8 @@
-import { SET_CURRENT_CHAT_ROOM } from '../actions/types'
+import { SET_CURRENT_CHAT_ROOM } from '../actions/types';
 
 const initialChatRoomState = {
   currentChatRoom: null,
-}
+};
 
 export default function userReducer(state = initialChatRoomState, action) {
   switch (action.type) {
@@ -10,9 +10,9 @@ export default function userReducer(state = initialChatRoomState, action) {
       return {
         ...state,
         currentChatRoom: action.payload,
-      }
+      };
     }
     default:
-      return state
+      return state;
   }
 }
