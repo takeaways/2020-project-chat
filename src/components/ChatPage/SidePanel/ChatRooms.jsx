@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { FaRegSmileWink, FaPlus } from 'react-icons/fa';
 import { connect } from 'react-redux';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+
 import Form from 'react-bootstrap/Form';
 import firebase from '../../../myFirebase';
 import {
   setCurrentChatRoom,
   setPrivateChatRoom,
 } from '../../../redux/actions/chatRoom_action';
+
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
 
 class ChatRooms extends Component {
   state = {
@@ -97,6 +100,9 @@ class ChatRooms extends Component {
           onClick={() => this.changeChatRoom(room)}
         >
           # {room.name}
+          <Badge className="noti-badge" variant="danger">
+            {1}
+          </Badge>
         </li>
       ))
     );
@@ -184,6 +190,7 @@ const Wrapper = styled.section`
   li {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 8px 0 8px 4px;
     cursor: pointer;
     border-radius: 5px;
