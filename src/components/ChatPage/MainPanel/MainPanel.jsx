@@ -84,7 +84,7 @@ export class MainPanel extends Component {
   }
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   padding: 2rem 2rem 0 2rem;
   min-height: 100vh;
 

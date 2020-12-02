@@ -1,27 +1,27 @@
-import React, { useRef, useState } from 'react'
-import styled from 'styled-components'
-import firebase from '../../../firebase'
-import Form from 'react-bootstrap/Form'
-import ProgressBar from 'react-bootstrap/ProgressBar'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import { useSelector } from 'react-redux'
-import mime from 'mime-types'
+import React, { useRef, useState } from 'react';
+import styled from 'styled-components';
+import firebase from '../../../firebase';
+import Form from 'react-bootstrap/Form';
+import ProgressBar from 'react-bootstrap/ProgressBar';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { useSelector } from 'react-redux';
+import mime from 'mime-types';
 function MessageForm() {
-  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom)
-  const user = useSelector((state) => state.user.currentUser)
-  const [content, setContet] = useState('')
-  const [errors, setErrors] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [percentage, setPercentage] = useState(0)
-  const fileRef = useRef()
-  const messagesRef = firebase.database().ref('messages')
-  const storageRef = firebase.storage().ref()
+  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
+  const user = useSelector((state) => state.user.currentUser);
+  const [content, setContet] = useState('');
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [percentage, setPercentage] = useState(0);
+  const fileRef = useRef();
+  const messagesRef = firebase.database().ref('messages');
+  const storageRef = firebase.storage().ref();
 
-  const handleChange = (e) => setContet(e.target.value)
+  const handleChange = (e) => setContet(e.target.value);
 
   const createMessage = (fileUrl = null) => {
-    const { uid, displayName, photoURL } = user
+    const { uid, displayName, photoURL } = user;
     const message = {
       timestamp: firebase.database.ServerValue.TIMESTAMP,
       user: {
@@ -29,79 +29,79 @@ function MessageForm() {
         name: displayName,
         image: photoURL,
       },
-    }
+    };
     if (fileUrl !== null) {
-      message['image'] = fileUrl
+      message['image'] = fileUrl;
     } else {
-      message['content'] = content
+      message['content'] = content;
     }
-    return message
-  }
+    return message;
+  };
 
   const handleSubmit = async (e) => {
-    e?.preventDefault()
+    e?.preventDefault();
 
     if (!content) {
-      return setErrors((prev) => prev.concat('Type contents first'))
+      return setErrors((prev) => prev.concat('Type contents first'));
     }
 
     try {
-      await messagesRef.child(chatRoom.id).push().set(createMessage())
-      setLoading(false)
-      setContet('')
-      setErrors([])
+      await messagesRef.child(chatRoom.id).push().set(createMessage());
+      setLoading(false);
+      setContet('');
+      setErrors([]);
     } catch (error) {
-      setErrors((pre) => pre.concat(error.message))
-      setLoading(false)
+      setErrors((pre) => pre.concat(error.message));
+      setLoading(false);
       setTimeout(() => {
-        setErrors([])
-      }, 5000)
+        setErrors([]);
+      }, 5000);
     }
-  }
+  };
 
   const handleOpenFile = () => {
-    fileRef.current.click()
-  }
+    fileRef.current.click();
+  };
 
   const handleUploadFile = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return
-    setLoading(true)
-    const filePath = `/message/public/${file.name}`
+    const file = e.target.files[0];
+    if (!file) return;
+    setLoading(true);
+    const filePath = `/message/public/${file.name}`;
     const metadata = {
       contentType: mime.lookup(file.name),
-    }
+    };
 
     try {
-      const uploadTask = storageRef.child(filePath).put(file, metadata)
+      const uploadTask = storageRef.child(filePath).put(file, metadata);
       uploadTask.on(
         'state_changed',
         (uploadSnapshot) => {
           const percentage =
             Math.round(
               uploadSnapshot.bytesTransferred / uploadSnapshot.totalBytes,
-            ) * 100
+            ) * 100;
 
-          setPercentage(percentage)
+          setPercentage(percentage);
         },
         (error) => {
-          console.log(error)
-          setLoading(false)
+          console.log(error);
+          setLoading(false);
         },
         () => {
           uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-            messagesRef.child(chatRoom.id).push().set(createMessage(url))
-          })
+            messagesRef.child(chatRoom.id).push().set(createMessage(url));
+          });
           setTimeout(() => {
-            setLoading(false)
-            setPercentage(0)
-          }, 1000)
+            setLoading(false);
+            setPercentage(0);
+          }, 1000);
         },
-      )
+      );
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -147,10 +147,10 @@ function MessageForm() {
         onChange={handleUploadFile}
       />
     </Wrapper>
-  )
+  );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   button {
     width: 100%;
     background: #7a84eb;
@@ -174,6 +174,6 @@ const Wrapper = styled.div`
       color: red;
     }
   }
-`
+`;
 
-export default MessageForm
+export default MessageForm;

@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { FaRegSmileWink, FaPlus } from 'react-icons/fa'
-import { connect } from 'react-redux'
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import firebase from '../../../firebase'
-import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action'
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { FaRegSmileWink, FaPlus } from 'react-icons/fa';
+import { connect } from 'react-redux';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import firebase from '../../../firebase';
+import { setCurrentChatRoom } from '../../../redux/actions/chatRoom_action';
 
 class ChatRooms extends Component {
   state = {
@@ -17,44 +17,44 @@ class ChatRooms extends Component {
     chatRooms: [],
     firstLoad: true,
     activeChatRoomId: '',
-  }
+  };
 
   componentDidMount() {
-    this.AddChatRoomsListeners()
+    this.AddChatRoomsListeners();
   }
 
   componentWillUnmount() {
-    this.state.chatRoomsRef.off()
+    this.state.chatRoomsRef.off();
   }
 
   setFirstChatRoom = () => {
-    const firstChatRoom = this.state.chatRooms[0]
+    const firstChatRoom = this.state.chatRooms[0];
     if (this.state.firstLoad && this.state.chatRooms.length > 0) {
-      this.props.dispatch(setCurrentChatRoom(firstChatRoom))
-      this.setState({ activeChatRoomId: firstChatRoom.id })
+      this.props.dispatch(setCurrentChatRoom(firstChatRoom));
+      this.setState({ activeChatRoomId: firstChatRoom.id });
     }
-    this.setState({ firstLoad: false })
-  }
+    this.setState({ firstLoad: false });
+  };
 
   AddChatRoomsListeners = () => {
-    const chatRooms = []
+    const chatRooms = [];
     this.state.chatRoomsRef.on('child_added', (snapshot) => {
-      chatRooms.push(snapshot.val())
-      this.setState({ chatRooms }, () => this.setFirstChatRoom())
-    })
-  }
+      chatRooms.push(snapshot.val());
+      this.setState({ chatRooms }, () => this.setFirstChatRoom());
+    });
+  };
 
-  handleShow = () => this.setState({ show: true })
-  handleClose = () => this.setState({ show: false })
+  handleShow = () => this.setState({ show: true });
+  handleClose = () => this.setState({ show: false });
   handleChange = (e) =>
     this.setState({
       [e.target.name]: e.target.value,
-    })
+    });
 
   addChatRoom = async () => {
-    const { name, description } = this.state
-    const { user } = this.props
-    const id = this.state.chatRoomsRef.push().key
+    const { name, description } = this.state;
+    const { user } = this.props;
+    const id = this.state.chatRoomsRef.push().key;
     const newChatRoom = {
       id,
       name,
@@ -63,26 +63,26 @@ class ChatRooms extends Component {
         name: user.displayName,
         image: user.photoURL,
       },
-    }
+    };
     try {
-      await this.state.chatRoomsRef.child(id).update(newChatRoom)
+      await this.state.chatRoomsRef.child(id).update(newChatRoom);
       this.setState({
         name: '',
         description: '',
         show: false,
-      })
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   handleSubmit = (e) => {
-    e.preventDefault()
-    const { name, description } = this.state
-    this.isFormValid(name, description) && this.addChatRoom()
-  }
+    e.preventDefault();
+    const { name, description } = this.state;
+    this.isFormValid(name, description) && this.addChatRoom();
+  };
 
-  isFormValid = (name, description) => name && description
+  isFormValid = (name, description) => name && description;
 
   renderChatRooms = (chatRooms) => {
     return (
@@ -96,13 +96,13 @@ class ChatRooms extends Component {
           # {room.name}
         </li>
       ))
-    )
-  }
+    );
+  };
 
   changeChatRoom = (room) => {
-    this.setState({ activeChatRoomId: room.id })
-    this.props.dispatch(setCurrentChatRoom(room))
-  }
+    this.setState({ activeChatRoomId: room.id });
+    this.props.dispatch(setCurrentChatRoom(room));
+  };
 
   render() {
     return (
@@ -153,19 +153,19 @@ class ChatRooms extends Component {
           </Modal.Footer>
         </Modal>
       </Wrapper>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     user: state.user.currentUser,
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps)(ChatRooms)
+export default connect(mapStateToProps)(ChatRooms);
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   .room-item {
     position: relative;
     width: 100%;
@@ -190,4 +190,4 @@ const Wrapper = styled.div`
   .active {
     background-color: #ffffff45;
   }
-`
+`;

@@ -83,7 +83,7 @@ function MessageHeader({ handleSearchChange }) {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   width: 100%;
   height: 170px;
   border: 0.2rem solid #ececec;
