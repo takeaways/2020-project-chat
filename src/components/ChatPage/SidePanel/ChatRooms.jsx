@@ -33,6 +33,9 @@ class ChatRooms extends Component {
 
   componentWillUnmount() {
     this.state.chatRoomsRef.off();
+    // this.state.chatRoom.forEach((chatRoom) => {
+    //   this.state.messageRef.child(chatRoom.id).off();
+    // });
   }
 
   setFirstChatRoom = () => {
@@ -86,6 +89,7 @@ class ChatRooms extends Component {
 
     this.setState({ notifications });
   };
+
   addNotificationListener = (chatRoomId) => {
     this.state.messageRef.child(chatRoomId).on('value', (snap) => {
       if (this.props.chatRoom) {
@@ -142,15 +146,10 @@ class ChatRooms extends Component {
   getNotificationCount = (room) => {
     let count = 0;
     this.state.notifications.forEach((notification) => {
-      console.log(notification.id, room.id);
       if (notification.id === room.id) {
-        console.log(notification);
         count = notification.count;
       }
     });
-
-    console.log(count);
-
     if (count > 0) {
       return count;
     }
@@ -177,6 +176,24 @@ class ChatRooms extends Component {
     this.setState({ activeChatRoomId: room.id });
     this.props.dispatch(setCurrentChatRoom(room));
     this.props.dispatch(setPrivateChatRoom(false));
+    this.clearNotifications();
+  };
+
+  clearNotifications = () => {
+    const index = this.state.notifications.findIndex(
+      (notification) => notification.id === this.props.chatRoom.id,
+    );
+
+    console.log('index', index);
+    if (index !== -1) {
+      let updatedNotifications = [...this.state.notifications];
+      updatedNotifications[index].lastKnownTotal = this.state.notifications[
+        index
+      ].total;
+      updatedNotifications[index].count = 0;
+      console.log('updatedNotifications[index]', updatedNotifications[index]);
+      this.setState({ notifications: updatedNotifications });
+    }
   };
 
   render() {
