@@ -1,19 +1,23 @@
-import React from 'react'
-import styled from 'styled-components'
-import Media from 'react-bootstrap/Media'
-import moment from 'moment'
+import React from 'react';
+import styled from 'styled-components';
+import Media from 'react-bootstrap/Media';
+import moment from 'moment';
 function Message({ message, user }) {
-  const timeFromNow = (timestamp) => moment(timestamp).fromNow()
+  const timeFromNow = (timestamp) => moment(timestamp).fromNow();
 
   const isImage = (message) =>
-    message.hasOwnProperty('image') && !message.hasOwnProperty('content')
+    message.hasOwnProperty('image') && !message.hasOwnProperty('content');
 
-  const isMessageMine = () => message.user.uid === user.uid
+  const isMessageMine = () => message || message.user.uid === user.uid;
 
   return (
     <Wrapper>
       <img className="mr-3" src={message.user.image} alt={message.user.name} />
-      <Media.Body className={isMessageMine(message, user) ? 'mine' : ''}>
+      <Media.Body
+        className={
+          message && user && isMessageMine(message, user) ? 'mine' : ''
+        }
+      >
         <h6>
           {message.user.name}
           <span> {timeFromNow(message.timestamp)}</span>
@@ -25,7 +29,7 @@ function Message({ message, user }) {
         )}
       </Media.Body>
     </Wrapper>
-  )
+  );
 }
 
 const Wrapper = styled(Media)`
@@ -66,6 +70,6 @@ const Wrapper = styled(Media)`
   img:hover {
     transform: scale(1.3);
   }
-`
+`;
 
-export default Message
+export default Message;

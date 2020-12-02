@@ -1,9 +1,9 @@
-import { SET_USER, CLEAR_USER, SET_USER_PHOTO } from '../actions/types'
+import { SET_USER, CLEAR_USER, SET_USER_PHOTO } from '../actions/types';
 
 const initialUserState = {
   currentUser: null,
   isLoading: true,
-}
+};
 
 export default function userReducer(state = initialUserState, action) {
   switch (action.type) {
@@ -12,7 +12,7 @@ export default function userReducer(state = initialUserState, action) {
         ...state,
         currentUser: action.payload,
         isLoading: false,
-      }
+      };
     }
 
     case CLEAR_USER: {
@@ -20,7 +20,7 @@ export default function userReducer(state = initialUserState, action) {
         ...state,
         currentUser: null,
         isLoading: false,
-      }
+      };
     }
 
     case SET_USER_PHOTO: {
@@ -28,10 +28,10 @@ export default function userReducer(state = initialUserState, action) {
         ...state,
         currentUser: { ...state.currentUser, photoUrl: action.payload },
         isLoading: false,
-      }
+      };
     }
 
     default:
-      return state
+      return state;
   }
 }

@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 function Favorited() {
-  return <div>Favorited Favorited</div>
+  return <div>Favorited Favorited</div>;
 }
 
-export default Favorited
+export default Favorited;

@@ -9,20 +9,26 @@ import FormControl from 'react-bootstrap/FormControl';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { FaLock } from 'react-icons/fa';
+import { FaLock, FaLockOpen } from 'react-icons/fa';
 import { MdFavorite } from 'react-icons/md';
 import { AiOutlineSearch } from 'react-icons/ai';
 import Image from 'react-bootstrap/Image';
+import { useSelector } from 'react-redux';
 
 function MessageHeader({ handleSearchChange }) {
+  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
+  const isPrivateChatRoom = useSelector(
+    (state) => state.chatRoom.isPrivateChatRoom,
+  );
+
   return (
     <Wrapper>
       <Container>
         <Row>
           <Col>
             <h2>
-              <FaLock />
-              방 이름
+              {isPrivateChatRoom ? <FaLock /> : <FaLockOpen />}
+              {chatRoom && chatRoom.name}
               <MdFavorite />
             </h2>
           </Col>
@@ -83,7 +89,7 @@ function MessageHeader({ handleSearchChange }) {
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   width: 100%;
   height: 170px;
   border: 0.2rem solid #ececec;

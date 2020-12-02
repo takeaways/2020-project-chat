@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import firebase from '../../../firebase';
+import firebase from '../../../myFirebase';
 
 import MessageForm from './MessageForm';
 import MessageHeader from './MessageHeader';
@@ -84,7 +84,7 @@ export class MainPanel extends Component {
   }
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   padding: 2rem 2rem 0 2rem;
   min-height: 100vh;
 

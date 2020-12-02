@@ -1,48 +1,48 @@
-import React, { useRef } from 'react'
-import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux'
-import firebase from '../../../firebase'
-import { IoIosChatboxes } from 'react-icons/io'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Image from 'react-bootstrap/Image'
-import mime from 'mime-types'
+import React, { useRef } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import firebase from '../../../myFirebase';
+import { IoIosChatboxes } from 'react-icons/io';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Image from 'react-bootstrap/Image';
+import mime from 'mime-types';
 
-import { setPhotoUrl } from '../../../redux/actions/user_action'
+import { setPhotoUrl } from '../../../redux/actions/user_action';
 
 function UserPanel() {
-  const user = useSelector((state) => state.user.currentUser)
-  const dispatch = useDispatch()
-  const fileRef = useRef()
+  const user = useSelector((state) => state.user.currentUser);
+  const dispatch = useDispatch();
+  const fileRef = useRef();
 
-  const handleLogout = () => firebase.auth().signOut()
+  const handleLogout = () => firebase.auth().signOut();
   const handleUpLoadImage = async () => {
-    const file = fileRef.current.files[0]
+    const file = fileRef.current.files[0];
 
-    const metadata = { contentType: mime.lookup(file.name) }
+    const metadata = { contentType: mime.lookup(file.name) };
 
     try {
       const uploadTaskSnapshot = await firebase
         .storage()
         .ref()
         .child(`user_image/${user.uid}`)
-        .put(file, metadata)
+        .put(file, metadata);
 
-      const photoURL = await uploadTaskSnapshot.ref.getDownloadURL()
+      const photoURL = await uploadTaskSnapshot.ref.getDownloadURL();
       if (photoURL) {
         await firebase.auth().currentUser.updateProfile({
           photoURL,
-        })
+        });
       }
 
       await firebase
         .database()
         .ref('users')
         .child(user.uid)
-        .update({ image: photoURL })
+        .update({ image: photoURL });
 
-      dispatch(setPhotoUrl(photoURL))
+      dispatch(setPhotoUrl(photoURL));
     } catch (error) {}
-  }
+  };
 
   return (
     <Wrapper>
@@ -56,7 +56,7 @@ function UserPanel() {
           <Dropdown.Menu>
             <Dropdown.Item
               onClick={() => {
-                fileRef.current.click()
+                fileRef.current.click();
               }}
             >
               프로필 사진변경
@@ -73,10 +73,10 @@ function UserPanel() {
         type="file"
       />
     </Wrapper>
-  )
+  );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
   h3 {
     font-size: 2rem;
   }
@@ -90,11 +90,11 @@ const Wrapper = styled.div`
       margin-top: 3px;
     }
   }
-`
+`;
 
 const Toggle = styled(Dropdown.Toggle)`
   background: transparent;
   border: 0px;
-`
+`;
 
-export default UserPanel
+export default UserPanel;
