@@ -1,6 +1,6 @@
 # React Chat Application Project with firebase in 2020
 
-## Skill Set
+## Skill Set.
 
 1. react
 2. redux
