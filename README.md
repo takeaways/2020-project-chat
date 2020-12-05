@@ -10,4 +10,4 @@
 
 - [x] LoginPage
 - [x] RegisterPage
-- [ ] ChatPage
+- [x] ChatPage
